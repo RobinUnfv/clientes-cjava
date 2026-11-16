@@ -65,55 +65,57 @@ services:
 #      start_period: 30s
 #    restart: on-failure
 
-  # SERVICIO DE CLIENTE
-#  msvc-cliente:
-#    build:
-#      context: .
-#      dockerfile: ./msvc-cliente/Dockerfile
-#    container_name: msvc-cliente
-#    depends_on:
-#      discovery-server:
-#        condition: service_healthy
-#      config-server:
-#        condition: service_healthy
-#    ports:
-#      - "${MSVC_CLIENTE_PORT}:8091"
-#    environment:
-#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
-#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
-#      - PORT_SERVICE_CLIENTE=${MSVC_CLIENTE_PORT}
-#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
-#      - BD_MYSQL_URL=jdbc:mysql://dbCustomer:${MYSQL_CUSTOMER_PORT}/${MYSQL_CUSTOMER_DB}
-#      - BD_MYSQL_USERNAME=${MYSQL_CUSTOMER_ROOT_USER}
-#      - BD_MYSQL_PASSWORD=${MYSQL_CUSTOMER_ROOT_PASSWORD}
-#    networks:
-#      - erp-vpc
-
   # BASE DE DATOS MONGODB
-#  mongodb:
-#    image: mongo
-#    container_name: mongodb
-#    restart: always
-#    ports:
-#      - "${PORT_MONGODB}:27017"
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-#      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-#      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-#    volumes:
-#      - mongo_data:/data/db
-#      - ./docker-files/db/mongo-init:/docker-entrypoint-initdb.d:ro
-#    networks:
-#      - erp-vpc
-#    healthcheck:
-#      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')",
-#              "-u", "${MONGO_INITDB_ROOT_USERNAME}",
-#              "-p", "${MONGO_INITDB_ROOT_PASSWORD}",
-#              "--authenticationDatabase", "admin", "--quiet" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-#      start_period: 20s
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - "${PORT_MONGODB}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    volumes:
+      - mongo_data:/data/db
+      - ./docker-files/db/mongo-init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - erp-vpc
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')",
+              "-u", "${MONGO_INITDB_ROOT_USERNAME}",
+              "-p", "${MONGO_INITDB_ROOT_PASSWORD}",
+              "--authenticationDatabase", "admin", "--quiet" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  #   SERVICIO MCLIENTES
+  mclientes:
+    build:
+      context: .
+      dockerfile: ./mclientes/Dockerfile
+    container_name: mclientes
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "${MSVC_CLIENTE_PORT}:9101"
+    environment:
+      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+      - PORT_SERVICE_CLIENTE=${MSVC_CLIENTE_PORT}
+      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+      - BD_MYSQL_URL=jdbc:mysql://dbCustomer:${MYSQL_CUSTOMER_PORT}/${MYSQL_CUSTOMER_DB}
+      - BD_MYSQL_USERNAME=${MYSQL_CUSTOMER_ROOT_USER}
+      - BD_MYSQL_PASSWORD=${MYSQL_CUSTOMER_ROOT_PASSWORD}
+    networks:
+      - erp-vpc
 
   # SERVICIO DE MANTENIMIENTO DE SOCIO
 #  msvc-man-socio:

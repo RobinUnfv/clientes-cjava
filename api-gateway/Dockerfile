@@ -1,4 +1,4 @@
-FROM eclipse-temurin:25-jdk-alpine  AS build
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS builder
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY . .
 
 RUN mvn clean package -DskipTests -pl api-gateway -am
 
-FROM eclipse-temurin:25-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 RUN apk add --no-cache curl bash
 WORKDIR /app
 

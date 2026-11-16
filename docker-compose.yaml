@@ -1,0 +1,403 @@
+services:
+  discovery-server:
+    build:
+      context: .
+      dockerfile: ./discovery-server/Dockerfile
+    container_name: discovery-server
+    ports:
+      - "${DISCOVERY_SERVICE_PORT}:8761"
+    environment:
+      - PORT_DISCOVERY_SERVER=${DISCOVERY_SERVICE_PORT}
+    networks:
+      - erp-vpc
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://discovery-server:${DISCOVERY_SERVICE_PORT}/actuator/health" ]
+      interval: 20s
+      timeout: 3s
+      retries: 5
+    restart: on-failure
+
+  config-server:
+    build:
+      context: .
+      dockerfile: ./config-server/Dockerfile
+    container_name: config-server
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+    ports:
+      - "${CONFI_SERVER_PORT}:9000"
+    environment:
+      - PORT_SERVICE_CONFIG=${CONFI_SERVER_PORT}
+      - CONFIG_SERVER_GIT_URI=${CONFI_SERVER_GIT_URI}
+      - CONFIG_SERVER_GIT_BRANCH=${CONFI_SERVER_GIT_BRANCH}
+      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+    networks:
+      - erp-vpc
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://config-server:${CONFI_SERVER_PORT}/actuator/health" ]
+      interval: 20s
+      timeout: 3s
+      retries: 5
+    restart: on-failure
+
+  # MYSQL - CLIENTE
+#  dbCustomer:
+#    image: mysql
+#    container_name: dbCustomer
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_CUSTOMER_ROOT_PASSWORD}
+#      MYSQL_DATABASE: ${MYSQL_CUSTOMER_DB}
+#      MYSQL_USER: ${MYSQL_CUSTOMER_USER}
+#      MYSQL_PASSWORD: ${MYSQL_CUSTOMER_PASSWORD}
+#    ports:
+#      - "${MYSQL_CUSTOMER_PORT}:3306"
+#    volumes:
+#      - ./docker-files/db/mysql-cliente:/docker-entrypoint-initdb.d
+#      - mysql-cliente-data:/var/lib/mysql
+#    networks:
+#      - erp-vpc
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_CUSTOMER_USER}", "-p${MYSQL_CUSTOMER_PASSWORD}", "--silent" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 30s
+#    restart: on-failure
+
+  # SERVICIO DE CLIENTE
+#  msvc-cliente:
+#    build:
+#      context: .
+#      dockerfile: ./msvc-cliente/Dockerfile
+#    container_name: msvc-cliente
+#    depends_on:
+#      discovery-server:
+#        condition: service_healthy
+#      config-server:
+#        condition: service_healthy
+#    ports:
+#      - "${MSVC_CLIENTE_PORT}:8091"
+#    environment:
+#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+#      - PORT_SERVICE_CLIENTE=${MSVC_CLIENTE_PORT}
+#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+#      - BD_MYSQL_URL=jdbc:mysql://dbCustomer:${MYSQL_CUSTOMER_PORT}/${MYSQL_CUSTOMER_DB}
+#      - BD_MYSQL_USERNAME=${MYSQL_CUSTOMER_ROOT_USER}
+#      - BD_MYSQL_PASSWORD=${MYSQL_CUSTOMER_ROOT_PASSWORD}
+#    networks:
+#      - erp-vpc
+
+  # BASE DE DATOS MONGODB
+#  mongodb:
+#    image: mongo
+#    container_name: mongodb
+#    restart: always
+#    ports:
+#      - "${PORT_MONGODB}:27017"
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+#      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+#      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+#    volumes:
+#      - mongo_data:/data/db
+#      - ./docker-files/db/mongo-init:/docker-entrypoint-initdb.d:ro
+#    networks:
+#      - erp-vpc
+#    healthcheck:
+#      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')",
+#              "-u", "${MONGO_INITDB_ROOT_USERNAME}",
+#              "-p", "${MONGO_INITDB_ROOT_PASSWORD}",
+#              "--authenticationDatabase", "admin", "--quiet" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 20s
+
+  # SERVICIO DE MANTENIMIENTO DE SOCIO
+#  msvc-man-socio:
+#    build:
+#      context: .
+#      dockerfile: ./msvc_man_socio/Dockerfile
+#    container_name: msvc-man-socio
+#    depends_on:
+#      discovery-server:
+#        condition: service_healthy
+#      config-server:
+#        condition: service_healthy
+#      mongodb:
+#        condition: service_healthy
+#    ports:
+#      - "8092:8092"
+#    environment:
+#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+#      - PORT_MAN_SOCIO=8092
+#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+#      - BD_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:${PORT_MONGODB}/dbPartner?authSource=admin
+#    networks:
+#      - erp-vpc
+
+#  msvc-man-socio2:
+#    build:
+#      context: .
+#      dockerfile: ./msvc_man_socio/Dockerfile
+#    container_name: msvc-man-socio2
+#    depends_on:
+#      discovery-server:
+#        condition: service_healthy
+#      config-server:
+#        condition: service_healthy
+#      mongodb:
+#        condition: service_healthy
+#    ports:
+#      - "8093:8093"
+#    environment:
+#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+#      - PORT_MAN_SOCIO=8093
+#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+#      - BD_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:${PORT_MONGODB}/dbPartner?authSource=admin
+#    networks:
+#      - erp-vpc
+
+#  msvc-man-socio3:
+#    build:
+#      context: .
+#      dockerfile: ./msvc_man_socio/Dockerfile
+#    container_name: msvc-man-socio3
+#    depends_on:
+#      discovery-server:
+#        condition: service_healthy
+#      config-server:
+#        condition: service_healthy
+#      mongodb:
+#        condition: service_healthy
+#    ports:
+#      - "8094:8094"
+#    environment:
+#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+#      - PORT_MAN_SOCIO=8094
+#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+#      - BD_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:${PORT_MONGODB}/dbPartner?authSource=admin
+#    networks:
+#      - erp-vpc
+
+#  api-gateway:
+#    build:
+#      context: .
+#      dockerfile: ./api-gateway/Dockerfile
+#    container_name: api-gateway
+#    depends_on:
+#      discovery-server:
+#        condition: service_healthy
+#      config-server:
+#        condition: service_healthy
+#    ports:
+#      - "${API_GATEWAY_PORT}:9090"
+#    environment:
+#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+#      - PORT_API_GATEWAY=${API_GATEWAY_PORT}
+#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+#    networks:
+#      - erp-vpc
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://api-gateway:9090/actuator/health" ]
+#      interval: 20s
+#      timeout: 3s
+#      retries: 5
+#    restart: on-failure
+
+  # MySQL - Base de datos de historial
+#  mysql-historial:
+#    image: mysql
+#    container_name: mysql-historial
+#    restart: unless-stopped
+#    environment:
+#      MYSQL_ROOT_PASSWORD: ${BD_MY_HIST_ROOT}
+#      MYSQL_DATABASE: ${BD_MY_HIST_BD}
+#      MYSQL_USER: ${BD_MY_HIST_USER}
+#      MYSQL_PASSWORD: ${BD_MY_HIST_PASS}
+#    ports:
+#      - "${BD_MY_HIST_PORT}:3306"
+#    volumes:
+#      - mysql_historial_data:/var/lib/mysql
+#      - ./docker-files/db/mysql-historial:/docker-entrypoint-initdb.d
+#    networks:
+#      - erp-vpc
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pcjava123" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#      start_period: 30s
+#    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+#
+#  # SERVICIO DE HISTORIAL DE CAMBIO DE ESTADO DE SOCIO
+#  msvc-historial:
+#    build:
+#      context: .
+#      dockerfile: ./msvc-historial/Dockerfile
+#    container_name: msvc-historial
+#    depends_on:
+#      discovery-server:
+#        condition: service_healthy
+#      config-server:
+#        condition: service_healthy
+#      mysql-historial:
+#        condition: service_healthy
+#    ports:
+#      - "8095:8095"
+#    environment:
+#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+#      - PORT_MSVC_HIST=8095
+#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+#      - BD_HIST_URL=jdbc:mysql://mysql-historial:3306/${BD_MY_HIST_BD}
+#      - BD_HIST_USERNAME=${BD_MY_HIST_USER}
+#      - BD_HIST_PASSWORD=${BD_MY_HIST_PASS}
+#    networks:
+#      - erp-vpc
+
+  # SERVICIO DE HISTORIAL DE CAMBIO DE ESTADO DE SOCIO
+#  msvc-historial2:
+#    build:
+#      context: .
+#      dockerfile: ./msvc-historial/Dockerfile
+#    container_name: msvc-historial2
+#    depends_on:
+#      discovery-server:
+#        condition: service_healthy
+#      config-server:
+#        condition: service_healthy
+#      mysql-historial:
+#        condition: service_healthy
+#    ports:
+#      - "8096:8096"
+#    environment:
+#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+#      - PORT_MSVC_HIST=8096
+#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+#      - BD_HIST_URL=jdbc:mysql://mysql-historial:3306/${BD_MY_HIST_BD}
+#      - BD_HIST_USERNAME=${BD_MY_HIST_USER}
+#      - BD_HIST_PASSWORD=${BD_MY_HIST_PASS}
+#    networks:
+#      - erp-vpc
+
+  # SEGURIDAD
+#  mysql-keycloak:
+#    image: mysql
+#    container_name: mysql-keycloak
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root_pwd
+#      MYSQL_DATABASE: keycloak
+#      MYSQL_USER: admin
+#      MYSQL_PASSWORD: cjava-pwd
+#    ports:
+#      - 3306:3306
+#    volumes:
+#      - mysql_keycloak:/var/lib/mysql
+#    networks:
+#      - erp-vpc
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost",
+#              "-u", "admin", "-pcjava-pwd", "--silent" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#      start_period: 30s
+#
+#  keycloak:
+#    image: quay.io/keycloak/keycloak:19.0.1
+#    container_name: keycloak
+#    environment:
+#      KEYCLOAK_ADMIN: admin
+#      KEYCLOAK_ADMIN_PASSWORD: admin
+#      KC_DB: mysql
+#      KC_DB_USERNAME: admin
+#      KC_DB_PASSWORD: cjava-pwd
+#      KC_DB_URL_HOST: mysql-keycloak
+#      KC_DB_URL_PORT: 3306
+#      KC_DB_SCHEMA: keycloak
+#      KC_HOSTNAME: keycloak.local
+#      KC_HOSTNAME_PORT: 8080
+#      KC_HOSTNAME_STRICT: "false"
+#      KC_HTTP_ENABLED: "true"
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      mysql-keycloak:
+#        condition: service_healthy
+#    command: start-dev
+#    networks:
+#      - erp-vpc
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://localhost:8080/realms/master" ]
+#      interval: 15s
+#      timeout: 10s
+#      retries: 10
+#      start_period: 90s
+#    restart: on-failure
+#
+#  # SERVICIO DE SEGURIDAD KEYCLOAK
+#  client-keycloak:
+#    build:
+#      context: .
+#      dockerfile: ./client-keycloak/Dockerfile
+#    container_name: client-keycloak
+#    depends_on:
+#      discovery-server:
+#        condition: service_healthy
+#      config-server:
+#        condition: service_healthy
+#      keycloak:
+#        condition: service_healthy
+#    ports:
+#      - "9099:9099"
+#    extra_hosts:
+#      - "keycloak.local:host-gateway"
+#    environment:
+#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+#      - PORT_CLIENT_KEYCLO=9099
+#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+#    networks:
+#      - erp-vpc
+
+  # SERVICIO DE HISTORIAL DE CAMBIO DE ESTADO DE SOCIO
+#  msvc-oauth:
+#    build:
+#      context: .
+#      dockerfile: ./msvc-oauth/Dockerfile
+#    container_name: msvc-oauth
+#    depends_on:
+#      discovery-server:
+#        condition: service_healthy
+#      config-server:
+#        condition: service_healthy
+#    ports:
+#      - "9100:9100"
+#    environment:
+#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+#      - PORT_MSVC_OAUTH=9100
+#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+#    networks:
+#      - erp-vpc
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://msvc-oauth:9100/actuator/health" ]
+#      interval: 15s
+#      timeout: 3s
+#      retries: 10
+
+networks:
+  erp-vpc:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local

@@ -15,6 +15,6 @@ public interface ClienteMapper {
 
     ClienteResponseDto toClienteResponseDto(Cliente cliente);
 
-    void updateClienteFromRequest(ClienteResponseDto requestDto, @MappingTarget Cliente cliente);
+    void updateClienteFromRequest(ClienteRequestDto requestDto, @MappingTarget Cliente cliente);
 
 }

@@ -91,7 +91,7 @@ services:
       retries: 5
       start_period: 20s
 
-  #   SERVICIO MCLIENTES
+#   SERVICIO MCLIENTES
   mclientes:
     build:
       context: .
@@ -105,15 +105,36 @@ services:
       mongodb:
         condition: service_healthy
     ports:
-      - "${MSVC_CLIENTE_PORT}:9101"
+      - "9101:9101"
     environment:
       - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
       - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
-      - PORT_SERVICE_CLIENTE=${MSVC_CLIENTE_PORT}
+      - PORT_MAN_SOCIO=9101
       - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
-      - BD_MYSQL_URL=jdbc:mysql://dbCustomer:${MYSQL_CUSTOMER_PORT}/${MYSQL_CUSTOMER_DB}
-      - BD_MYSQL_USERNAME=${MYSQL_CUSTOMER_ROOT_USER}
-      - BD_MYSQL_PASSWORD=${MYSQL_CUSTOMER_ROOT_PASSWORD}
+      - BD_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:${PORT_MONGODB}/dbPartner?authSource=admin
+    networks:
+      - erp-vpc
+
+  mclientes2:
+    build:
+      context: .
+      dockerfile: ./mclientes/Dockerfile
+    container_name: mclientes2
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "9102:9102"
+    environment:
+      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+      - PORT_MAN_SOCIO=9102
+      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+      - BD_MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:${PORT_MONGODB}/dbPartner?authSource=admin
     networks:
       - erp-vpc
 

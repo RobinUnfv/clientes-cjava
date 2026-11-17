@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: cclientes
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_CONF_URI}
+      profile: ${CONFIG_SERVER_PROFILE}
+      enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.robin.cclientes: WARN
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+  file:
+    name: logs/cclientes.log

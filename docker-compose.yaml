@@ -138,6 +138,26 @@ services:
     networks:
       - erp-vpc
 
+  cclientes:
+    build:
+      context: .
+      dockerfile: ./cclientes/Dockerfile
+    container_name: cclientes
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    ports:
+      - "9103:9103"
+    environment:
+      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+      - PORT_CCLIENTE=9103
+      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+    networks:
+      - erp-vpc
+
   # SERVICIO DE MANTENIMIENTO DE SOCIO
 #  msvc-man-socio:
 #    build:
@@ -208,31 +228,31 @@ services:
 #    networks:
 #      - erp-vpc
 
-#  api-gateway:
-#    build:
-#      context: .
-#      dockerfile: ./api-gateway/Dockerfile
-#    container_name: api-gateway
-#    depends_on:
-#      discovery-server:
-#        condition: service_healthy
-#      config-server:
-#        condition: service_healthy
-#    ports:
-#      - "${API_GATEWAY_PORT}:9090"
-#    environment:
-#      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
-#      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
-#      - PORT_API_GATEWAY=${API_GATEWAY_PORT}
-#      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
-#    networks:
-#      - erp-vpc
-#    healthcheck:
-#      test: [ "CMD", "curl", "-f", "http://api-gateway:9090/actuator/health" ]
-#      interval: 20s
-#      timeout: 3s
-#      retries: 5
-#    restart: on-failure
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./api-gateway/Dockerfile
+    container_name: api-gateway
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    ports:
+      - "${API_GATEWAY_PORT}:9100"
+    environment:
+      - CONFIG_SERVER_CONF_URI=http://${CONFI_SERVER_HOST}:${CONFI_SERVER_PORT}
+      - CONFIG_SERVER_PROFILE=${CONFI_SERVER_PROFILE}
+      - PORT_API_GATEWAY=${API_GATEWAY_PORT}
+      - EUREKA_CLIENT_SERVICE_URL=http://${DISCOVERY_SERVICE_HOST}:${DISCOVERY_SERVICE_PORT}/eureka
+    networks:
+      - erp-vpc
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://api-gateway:9100/actuator/health" ]
+      interval: 20s
+      timeout: 3s
+      retries: 5
+    restart: on-failure
 
   # MySQL - Base de datos de historial
 #  mysql-historial:

@@ -20,7 +20,7 @@
         <module>config-server</module>
         <module>mclientes</module>
         <module>cclientes</module>
-<!--        <module>api-gateway</module>-->
+        <module>api-gateway</module>
 
     </modules>
 

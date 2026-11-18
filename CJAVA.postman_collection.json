@@ -1,0 +1,685 @@
+{
+  "info": {
+    "_postman_id": "a85f9a34-9dc3-4812-bd9d-6af18e65a6ae",
+    "name": "CJAVA",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26717737"
+  },
+  "item": [
+    {
+      "name": "PRACTICA1",
+      "item": [
+        {
+          "name": "POSGRESS",
+          "item": [
+            {
+              "name": "clientes",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:7010/api/cliente",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "7010",
+                  "path": [
+                    "api",
+                    "cliente"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:7010/api/cliente/11111111-1111-1111-1111-111111111111",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "7010",
+                  "path": [
+                    "api",
+                    "cliente",
+                    "11111111-1111-1111-1111-111111111111"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "saveCliente",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"nombre\": \"DIEGO TORREJON\",\r\n    \"montoCompras\": 1000.50,\r\n    \"active\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "localhost:7010/api/cliente",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "7010",
+                  "path": [
+                    "api",
+                    "cliente"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "mongo",
+          "item": [
+            {
+              "name": "compras",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:7020/api/compra",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "7020",
+                  "path": [
+                    "api",
+                    "compra"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "id",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:7020/api/compra/cod01",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "7020",
+                  "path": [
+                    "api",
+                    "compra",
+                    "cod01"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Gateway",
+          "item": [
+            {
+              "name": "Compras",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:4040/api/compra",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "4040",
+                  "path": [
+                    "api",
+                    "compra"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "clientes",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:4040/api/cliente",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "4040",
+                  "path": [
+                    "api",
+                    "cliente"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "CompraID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:4040/api/compra/cod02",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "4040",
+                  "path": [
+                    "api",
+                    "compra",
+                    "cod02"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "clientes",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "localhost:4040/api/cliente/clientes",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "4040",
+                  "path": [
+                    "api",
+                    "cliente",
+                    "clientes"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "outh2",
+      "item": [
+        {
+          "name": "public",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:9099/public",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9099",
+              "path": [
+                "public"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PRACTICA02",
+      "item": [
+        {
+          "name": "Cliente",
+          "item": [
+            {
+              "name": "todos",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8091/api/cliente/clientes",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8091",
+                  "path": [
+                    "api",
+                    "cliente",
+                    "clientes"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "guardar",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"nombre\": \"ROBINZON\",\r\n    \"paterno\": \"SANTANA\",\r\n    \"materno\": \"LLACZA\",\r\n    \"correo\": \"SANTANA@GMAIL.COM\",\r\n    \"telefono\": \"947393709\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8091/api/cliente",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8091",
+                  "path": [
+                    "api",
+                    "cliente"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Mant-Socio",
+          "item": [
+            {
+              "name": "socios",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8092/api/socio",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8092",
+                  "path": [
+                    "api",
+                    "socio"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "dni",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8092/api/socio/dni/789654123",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8092",
+                  "path": [
+                    "api",
+                    "socio",
+                    "dni",
+                    "789654123"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "guardar",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"dni\": \"44836600\",\r\n    \"nombre\": \"GENESIS\",\r\n    \"paterno\": \"CARRERA\",\r\n    \"materno\": \"DE LA CRUZ\",\r\n    \"correo\": \"CARRERA@gmail.com\",\r\n    \"telefono\": \"987654321\",\r\n    \"stsSocio\": \"ACTIVO\",\r\n    \"tipoMembresia\": \"GOLD\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8092/api/socio",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8092",
+                  "path": [
+                    "api",
+                    "socio"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "actualizar",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"dni\": \"44836659\",\r\n    \"nombre\": \"ROBINZON MATTEO\",\r\n    \"paterno\": \"SANTANA\",\r\n    \"materno\": \"LLACZA\",\r\n    \"correo\": \"SANTANA@gmail.com\",\r\n    \"telefono\": \"947303709\",\r\n    \"stsSocio\": \"ACTIVO\",\r\n    \"tipoMembresia\": \"GOLD\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8092/api/socio/dni/44836659",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8092",
+                  "path": [
+                    "api",
+                    "socio",
+                    "dni",
+                    "44836659"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Gateway",
+          "item": [
+            {
+              "name": "clientes",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:9090/api/cliente/clientes",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "9090",
+                  "path": [
+                    "api",
+                    "cliente",
+                    "clientes"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "SocioDni",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:9090/api/socio/dni/1234567",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "9090",
+                  "path": [
+                    "api",
+                    "socio",
+                    "dni",
+                    "1234567"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Socios",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:9090/api/socio",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "9090",
+                  "path": [
+                    "api",
+                    "socio"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "ActuEstadoSocio",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"dni\": \"12345678\",\n    \"estado\": \"INACTIVO\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:9090/api/historial/socio",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "9090",
+                  "path": [
+                    "api",
+                    "historial",
+                    "socio"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "New Request",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": ""
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "New Request",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": ""
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Historial",
+          "item": [
+            {
+              "name": "registrar",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"dni\": \"712345018\",\r\n    \"estado\": \"ACTIVO\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8095/api/historial/socio",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8095",
+                  "path": [
+                    "api",
+                    "historial",
+                    "socio"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PRUEBA03",
+      "item": [
+        {
+          "name": "listaMClientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:9100/api/clientes1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9100",
+              "path": [
+                "api",
+                "clientes1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "guardarMCliente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"GENESIS\",\r\n    \"paterno\": \"DE LA CRUZ\",\r\n    \"correo\": \"GENESIS@GMAIL.COM\",\r\n    \"direccion\": \"A.H TUPAC AMARY LT 1O ZN 3\",\r\n    \"telefono\": \"975338765\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9100/api/clientes1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9100",
+              "path": [
+                "api",
+                "clientes1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "idMCliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:9100/api/clientes1/6afc869b2f59e5c50fdc3f88",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9100",
+              "path": [
+                "api",
+                "clientes1",
+                "6afc869b2f59e5c50fdc3f88"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "idCCliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:9100/api/clientes2/6afc869b2f59e5c50fdc3f88",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9100",
+              "path": [
+                "api",
+                "clientes2",
+                "6afc869b2f59e5c50fdc3f88"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "saveCCliente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"MATTEO\",\r\n    \"paterno\": \"SANTANA\",\r\n    \"correo\": \"MATTEO@GMAIL.COM\",\r\n    \"direccion\": \"A.H TUPAC AMARY LT 1O ZN 3\",\r\n    \"telefono\": \"987654321\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9100/api/clientes2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "9100",
+              "path": [
+                "api",
+                "clientes2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
